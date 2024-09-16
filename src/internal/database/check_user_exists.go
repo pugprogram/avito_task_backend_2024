@@ -10,6 +10,7 @@ func (db Database) CheckUserExist(ctx context.Context, userName string) error {
 	var exists bool
 
 	query := `SELECT EXISTS(SELECT 1 FROM employee WHERE username = $1)`
+
 	err := db.db.QueryRowContext(ctx, query, userName).Scan(&exists)
 	if err != nil || !exists {
 		return handlers.ErrMsgUserNotExist

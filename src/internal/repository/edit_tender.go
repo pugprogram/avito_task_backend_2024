@@ -24,6 +24,6 @@ func (repo Repository) EditTender(ctx context.Context, editTenderDto handlers.Ed
 	if err != nil {
 		return nil, err
 	}
-	return editTenderOut, nil
 
+	return editTenderOut, nil
 }

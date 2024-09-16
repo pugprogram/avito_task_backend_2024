@@ -57,9 +57,11 @@ func ToGetBidReviewsDTO(tenderId TenderId, params GetBidReviewsParams) (*GetBidR
 func (s Server) GetBidReviews(w http.ResponseWriter, r *http.Request, tenderId TenderId, params GetBidReviewsParams) {
 	dto, _, err := ToGetBidReviewsDTO(tenderId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
@@ -70,6 +72,7 @@ func (s Server) GetBidReviews(w http.ResponseWriter, r *http.Request, tenderId T
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -91,6 +94,7 @@ func (s Server) GetBidReviews(w http.ResponseWriter, r *http.Request, tenderId T
 	}
 
 	respJSON := ToReviewsJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

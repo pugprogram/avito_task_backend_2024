@@ -41,6 +41,7 @@ func (db Database) CreateBid(ctx context.Context, createBidDTO handlers.CreateBi
 	`
 
 	max_version := 0
+
 	err = db.db.QueryRowContext(ctx, queryMaxVersion, createBidDTO.TenderId).Scan(&max_version)
 	if err != nil {
 		return nil, handlers.ErrMsgNotFound

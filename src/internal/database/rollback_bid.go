@@ -61,6 +61,7 @@ func (db Database) RollbackBid(ctx context.Context, rollbackBidDTO handlers.Roll
 	`
 
 	var newBid handlers.BidOut
+
 	err = db.db.QueryRowContext(ctx, queryInsertNewVersion, bid.Id, bid.Name, bid.Description, bid.Status, bid.TenderId, bid.TenderVersion, bid.ApprovedCount, bid.AuthorType, bid.BidAuthorId, lastVersion).Scan(
 		&newBid.Id,
 		&newBid.Name,

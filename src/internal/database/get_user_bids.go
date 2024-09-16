@@ -30,10 +30,12 @@ func (db Database) GetUserBids(ctx context.Context, getUserBidsDTO handlers.GetU
 	var bids []handlers.BidOut
 
 	for rows.Next() {
-		var bid handlers.BidOut
-		var bidId uuid.UUID
-		var tenderId uuid.UUID
-		var authorId uuid.UUID
+		var (
+			bid      handlers.BidOut
+			bidId    uuid.UUID
+			tenderId uuid.UUID
+			authorId uuid.UUID
+		)
 
 		err := rows.Scan(&bidId, &bid.Name, &bid.Description, &bid.Status, &tenderId, &bid.AuthorType, &authorId, &bid.Version, &bid.CreatedAt)
 		if err != nil {

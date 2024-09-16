@@ -19,6 +19,7 @@ func (db Database) CheckUserTenderPermissionToBidId(ctx context.Context, usernam
 		FROM employee
 		WHERE username = $1
 	`, username).Scan(&userID)
+
 	if err != nil {
 		return err
 	}
@@ -30,6 +31,7 @@ func (db Database) CheckUserTenderPermissionToBidId(ctx context.Context, usernam
 		JOIN tender t ON b.tender_id = t.tender_id
 		WHERE b.bid_id = $1
 	`, bidUUID).Scan(&orgID)
+
 	if err != nil {
 		return err
 	}
@@ -41,6 +43,7 @@ func (db Database) CheckUserTenderPermissionToBidId(ctx context.Context, usernam
 		FROM organization_responsible
 		WHERE organization_id = $1 AND user_id = $2
 	`, orgID, userID).Scan(&count)
+
 	if err != nil {
 		return err
 	}

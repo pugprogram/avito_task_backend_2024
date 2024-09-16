@@ -8,7 +8,6 @@ import (
 )
 
 func (db Database) GetUserTenders(ctx context.Context, getUserTendersDTO handlers.GetUserTendersDTO) (*[]handlers.TenderOUT, error) {
-
 	queryTenders := `
 		SELECT t.*
 		FROM tender t
@@ -30,6 +29,7 @@ func (db Database) GetUserTenders(ctx context.Context, getUserTendersDTO handler
 	defer rows.Close()
 
 	var tenders []handlers.TenderOUT
+
 	for rows.Next() {
 		var tender handlers.TenderOUT
 
@@ -50,6 +50,7 @@ func (db Database) GetUserTenders(ctx context.Context, getUserTendersDTO handler
 
 func GetUserIDByUsername(ctx context.Context, db *sql.DB, Username string) (string, error) {
 	var orgID string
+
 	query := `
 	SELECT id
 	FROM employee
@@ -61,5 +62,6 @@ func GetUserIDByUsername(ctx context.Context, db *sql.DB, Username string) (stri
 	if err != nil {
 		return "", err
 	}
+
 	return orgID, nil
 }

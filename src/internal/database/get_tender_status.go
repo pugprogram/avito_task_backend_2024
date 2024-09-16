@@ -7,7 +7,6 @@ import (
 )
 
 func (db Database) GetTenderStatus(ctx context.Context, getTenderStatusDTO handlers.GetTenderStatusDTO) (*string, error) {
-
 	query := `
 		SELECT t.status
 		FROM tender t
@@ -20,6 +19,7 @@ func (db Database) GetTenderStatus(ctx context.Context, getTenderStatusDTO handl
 	`
 
 	var status string
+
 	err := db.db.QueryRowContext(ctx, query, getTenderStatusDTO.TenderId).Scan(&status)
 	if err != nil {
 		return nil, handlers.ErrMsgNotFound

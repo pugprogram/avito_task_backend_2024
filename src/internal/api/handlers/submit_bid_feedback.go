@@ -35,9 +35,11 @@ func ToSubmitBidFeedbackDTO(bidId BidId, params SubmitBidFeedbackParams) (*Submi
 func (s Server) SubmitBidFeedback(w http.ResponseWriter, r *http.Request, bidId BidId, params SubmitBidFeedbackParams) {
 	dto, _, err := ToSubmitBidFeedbackDTO(bidId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
@@ -48,6 +50,7 @@ func (s Server) SubmitBidFeedback(w http.ResponseWriter, r *http.Request, bidId 
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -59,6 +62,7 @@ func (s Server) SubmitBidFeedback(w http.ResponseWriter, r *http.Request, bidId 
 
 			return
 		}
+
 		w.WriteHeader(http.StatusNotFound)
 		_ = json.NewEncoder(w).Encode(&ErrorResponse{
 			Reason: ErrMsgNotFound.Error(),
@@ -68,6 +72,7 @@ func (s Server) SubmitBidFeedback(w http.ResponseWriter, r *http.Request, bidId 
 	}
 
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

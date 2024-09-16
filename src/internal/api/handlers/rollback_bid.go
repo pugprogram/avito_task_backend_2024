@@ -35,9 +35,11 @@ func ToRollbackBidDTO(bidId BidId, version int32, params RollbackBidParams) (*Ro
 func (s Server) RollbackBid(w http.ResponseWriter, r *http.Request, bidId BidId, version int32, params RollbackBidParams) {
 	dto, _, err := ToRollbackBidDTO(bidId, version, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
@@ -48,6 +50,7 @@ func (s Server) RollbackBid(w http.ResponseWriter, r *http.Request, bidId BidId,
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -69,6 +72,7 @@ func (s Server) RollbackBid(w http.ResponseWriter, r *http.Request, bidId BidId,
 	}
 
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

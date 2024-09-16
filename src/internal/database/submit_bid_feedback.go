@@ -12,7 +12,9 @@ func (db Database) SubmitBidFeedback(ctx context.Context, submitBidFeedbackDTO h
 	employeeQuery := `
 		SELECT id FROM employee WHERE username = $1
 	`
+
 	var employeeID uuid.UUID
+
 	err := db.db.QueryRowContext(ctx, employeeQuery, submitBidFeedbackDTO.Username).Scan(&employeeID)
 	if err != nil {
 		return nil, err
@@ -26,7 +28,9 @@ func (db Database) SubmitBidFeedback(ctx context.Context, submitBidFeedbackDTO h
 		ORDER BY bid_version DESC
 		LIMIT 1
 	`
+
 	var bidVersion int
+
 	err = db.db.QueryRowContext(ctx, bidVersionQuery, submitBidFeedbackDTO.BidId).Scan(&bidVersion)
 	if err != nil {
 		return nil, err
@@ -37,7 +41,9 @@ func (db Database) SubmitBidFeedback(ctx context.Context, submitBidFeedbackDTO h
 		INSERT INTO bid_feedback (id, bid_id, bid_version, author, bid_feedback, created_at)
 		VALUES ($1, $2, $3, $4, $5, NOW())
 	`
+
 	feedbackID := uuid.New() // Генерация уникального идентификатора для отзыва
+
 	_, err = db.db.ExecContext(ctx, insertQuery, feedbackID, submitBidFeedbackDTO.BidId, bidVersion, employeeID, submitBidFeedbackDTO.BidFeedback)
 	if err != nil {
 		return nil, err
@@ -60,9 +66,12 @@ func (db Database) GetBid(ctx context.Context, bidID string) (*handlers.BidOut, 
 		ORDER BY bid_version DESC
 		LIMIT 1
 	`
-	var bidOut handlers.BidOut
-	var bidAuthorID uuid.UUID
-	var tenderID uuid.UUID
+
+	var (
+		bidOut      handlers.BidOut
+		bidAuthorID uuid.UUID
+		tenderID    uuid.UUID
+	)
 
 	err := db.db.QueryRowContext(ctx, query, bidID).Scan(
 		&bidOut.Id,

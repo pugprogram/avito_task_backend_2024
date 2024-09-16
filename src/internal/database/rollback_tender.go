@@ -7,15 +7,16 @@ import (
 )
 
 func (db Database) RollbackTender(ctx context.Context, rollbackTenderDTO handlers.RollbackTenderDTO) (*handlers.TenderOUT, error) {
-
 	queryGetLastVersion := `
 	SELECT tender_id, tender_name, tender_description, service_type, status, organization_id, tender_version
 	FROM tender
 	WHERE tender_id = $1 AND tender_version = $2;
 	`
 
-	var tender handlers.TenderOUT
-	var newTender handlers.TenderOUT
+	var (
+		tender    handlers.TenderOUT
+		newTender handlers.TenderOUT
+	)
 
 	err := db.db.QueryRowContext(ctx, queryGetLastVersion, rollbackTenderDTO.TenderID, rollbackTenderDTO.TenderVersion).Scan(
 		&tender.Id,

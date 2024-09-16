@@ -8,7 +8,6 @@ import (
 
 // CheckUserBidPermissionWithBidID проверяет что пользователь - автор предложения или ответственный за организацию
 func (db Database) CheckUserBidPermissionWithBidID(ctx context.Context, username string, bidId string) error {
-
 	query := `
 		SELECT EXISTS (
 			SELECT 1
@@ -30,11 +29,11 @@ func (db Database) CheckUserBidPermissionWithBidID(ctx context.Context, username
     `
 
 	var exists bool
+
 	err := db.db.QueryRowContext(ctx, query, username, bidId).Scan(&exists)
 	if err != nil {
 		return handlers.ErrMsgNotPermission
 	}
 
 	return nil
-
 }

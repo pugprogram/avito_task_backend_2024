@@ -40,9 +40,11 @@ func ToUpdateBidStatusDTO(in UpdateBidStatusParams, bidId BidId) (*UpdateBidStat
 func (s Server) UpdateBidStatus(w http.ResponseWriter, r *http.Request, bidId BidId, params UpdateBidStatusParams) {
 	dto, _, err := ToUpdateBidStatusDTO(params, bidId)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
@@ -75,6 +77,7 @@ func (s Server) UpdateBidStatus(w http.ResponseWriter, r *http.Request, bidId Bi
 	}
 
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

@@ -50,19 +50,24 @@ func ToEditBidDTO(in EditBidJSONBody, bidId BidId, params EditBidParams) (*EditB
 
 func (s Server) EditBid(w http.ResponseWriter, r *http.Request, bidId BidId, params EditBidParams) {
 	var tenderReq EditBidJSONBody
+
 	err := json.NewDecoder(r.Body).Decode(&tenderReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+
 		respJSON := ToErrorResponseJSON(err)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
 	dto, _, err := ToEditBidDTO(tenderReq, bidId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
@@ -76,6 +81,7 @@ func (s Server) EditBid(w http.ResponseWriter, r *http.Request, bidId BidId, par
 
 			return
 		}
+
 		if errors.Is(err, ErrMsgNotPermission) {
 			w.WriteHeader(http.StatusForbidden)
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
@@ -94,6 +100,7 @@ func (s Server) EditBid(w http.ResponseWriter, r *http.Request, bidId BidId, par
 	}
 
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

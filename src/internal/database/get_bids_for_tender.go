@@ -7,7 +7,6 @@ import (
 )
 
 func (db Database) GetBidsForTender(ctx context.Context, getBidsForTender handlers.GetBidsForTenderDTO) (*[]handlers.BidOut, error) {
-
 	query := `
 		SELECT b.bid_id, b.bid_name, b.bid_description, b.bid_status, b.tender_id, b.bid_author_type, b.bid_author_id, b.bid_version, b.created_at
 		FROM bid b

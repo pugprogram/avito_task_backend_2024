@@ -30,11 +30,13 @@ func (db Database) GetBidReviews(ctx context.Context, getBidReviewsDTO handlers.
 	defer rows.Close()
 
 	var reviews []handlers.BidReviewOut
+
 	for rows.Next() {
 		var review handlers.BidReviewOut
 		if err := rows.Scan(&review.Id, &review.CreatedAt, &review.Description); err != nil {
 			return nil, handlers.ErrMsgNotFound
 		}
+
 		reviews = append(reviews, review)
 	}
 

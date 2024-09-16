@@ -22,6 +22,7 @@ func (db Database) GetBidStatus(ctx context.Context, getBidStatusDTO handlers.Ge
     `
 
 	var status string
+
 	err = db.db.QueryRowContext(ctx, query, BidUUID).Scan(&status)
 	if err != nil {
 		return nil, handlers.ErrMsgNotFound

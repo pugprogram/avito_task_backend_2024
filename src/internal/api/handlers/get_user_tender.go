@@ -17,6 +17,7 @@ func ToGetUserTenderDTO(tender GetUserTendersParams) (*GetUserTendersDTO, string
 		var defaultLimit int32 = 5
 		tender.Limit = &defaultLimit
 	}
+
 	if *tender.Limit < 0 && *tender.Limit > 50 {
 		return nil, "limit", errors.New("invalid format for limit")
 	}
@@ -63,6 +64,7 @@ func (s Server) GetUserTenders(w http.ResponseWriter, r *http.Request, params Ge
 	}
 
 	respJSON := ToTendersResponseJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

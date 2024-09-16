@@ -16,6 +16,7 @@ func (db Database) CheckUserBidPermission(ctx context.Context, username string) 
     `
 
 	var exists bool
+
 	err := db.db.QueryRowContext(ctx, query, username).Scan(&exists)
 	if err != nil {
 		return handlers.ErrMsgNotPermission

@@ -45,6 +45,7 @@ func ToEditTenderDTO(tender EditTenderJSONBody, tenderId TenderId, params EditTe
 		flagTenderConstruction := *tender.ServiceType != TenderServiceType(Construction)
 		flagTenderDelivery := *tender.ServiceType != TenderServiceType(Delivery)
 		flagTenderManufacture := *tender.ServiceType != TenderServiceType(Manufacture)
+
 		if flagTenderConstruction && flagTenderDelivery && flagTenderManufacture {
 			return nil, "tender service type", errors.New("invalid format for tender service type")
 		}
@@ -54,6 +55,7 @@ func ToEditTenderDTO(tender EditTenderJSONBody, tenderId TenderId, params EditTe
 		var defaultServiceType TenderServiceType = ""
 		tender.ServiceType = &(defaultServiceType)
 	}
+
 	return &EditTenderDTO{
 		TenderId:          tenderId,
 		Username:          params.Username,
@@ -65,20 +67,28 @@ func ToEditTenderDTO(tender EditTenderJSONBody, tenderId TenderId, params EditTe
 
 func (s Server) EditTender(w http.ResponseWriter, r *http.Request, tenderId TenderId, params EditTenderParams) {
 	var tenderReq EditTenderJSONBody
+
 	err := json.NewDecoder(r.Body).Decode(&tenderReq)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
+
 	dto, _, err := ToEditTenderDTO(tenderReq, tenderId, params)
+
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
+
 	resp, err := s.repo.EditTender(r.Context(), *dto)
 	if err != nil {
 		if errors.Is(err, ErrMsgUserNotExist) {
@@ -86,6 +96,7 @@ func (s Server) EditTender(w http.ResponseWriter, r *http.Request, tenderId Tend
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -94,6 +105,7 @@ func (s Server) EditTender(w http.ResponseWriter, r *http.Request, tenderId Tend
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgNotPermission.Error(),
 			})
+
 			return
 		}
 
@@ -101,11 +113,12 @@ func (s Server) EditTender(w http.ResponseWriter, r *http.Request, tenderId Tend
 		_ = json.NewEncoder(w).Encode(&ErrorResponse{
 			Reason: ErrMsgNotFound.Error(),
 		})
+
 		return
 	}
 
 	respJSON := ToTenderJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
-
 }

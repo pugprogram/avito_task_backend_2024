@@ -38,9 +38,11 @@ func ToSubmitBidDecisionDTO(bidId BidId, params SubmitBidDecisionParams) (*Submi
 func (s Server) SubmitBidDecision(w http.ResponseWriter, r *http.Request, bidId BidId, params SubmitBidDecisionParams) {
 	dto, _, err := ToSubmitBidDecisionDTO(bidId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
@@ -51,6 +53,7 @@ func (s Server) SubmitBidDecision(w http.ResponseWriter, r *http.Request, bidId 
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -70,7 +73,9 @@ func (s Server) SubmitBidDecision(w http.ResponseWriter, r *http.Request, bidId 
 
 		return
 	}
+
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

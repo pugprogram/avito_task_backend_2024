@@ -35,6 +35,7 @@ func ToCreateTenderDTO(tender CreateTenderJSONBody) (*CreateTenderDTO, string, e
 	if len(tender.OrganizationId) == 0 || len(tender.OrganizationId) > 100 {
 		return nil, "Organization Id", errors.New("invalid format to organization id")
 	}
+
 	return &CreateTenderDTO{
 		CreatorUsername: tender.CreatorUsername,
 		Description:     tender.Description,
@@ -43,7 +44,6 @@ func ToCreateTenderDTO(tender CreateTenderJSONBody) (*CreateTenderDTO, string, e
 		ServiceType:     string(tender.ServiceType),
 		Status:          "Created",
 	}, "", nil
-
 }
 
 func (s Server) CreateTender(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +52,7 @@ func (s Server) CreateTender(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&tenderReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+
 		respJSON := ToErrorResponseJSON(err)
 		_ = json.NewEncoder(w).Encode(respJSON)
 
@@ -61,6 +62,7 @@ func (s Server) CreateTender(w http.ResponseWriter, r *http.Request) {
 	dto, _, err := ToCreateTenderDTO(tenderReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+
 		respJSON := ToErrorResponseJSON(err)
 		_ = json.NewEncoder(w).Encode(respJSON)
 
@@ -87,6 +89,7 @@ func (s Server) CreateTender(w http.ResponseWriter, r *http.Request) {
 	}
 
 	respJSON := ToTenderJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

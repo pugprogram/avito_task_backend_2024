@@ -27,6 +27,7 @@ func (db Database) CheckUserTenderPermission(ctx context.Context, username strin
 
 	var exists bool
 	err = db.db.QueryRowContext(ctx, query, tenderUUID, username).Scan(&exists)
+
 	if err != nil {
 		return err
 	}

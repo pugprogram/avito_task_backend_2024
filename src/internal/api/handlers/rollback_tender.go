@@ -16,9 +16,11 @@ func ToRollbackTenderDTO(tenderId TenderId, version int32, params RollbackTender
 	if len(tenderId) > 100 {
 		return nil, "tender ID", errors.New("invalid format for tender ID")
 	}
+
 	if version < 1 {
 		return nil, "version tender", errors.New("invalid format for version tender")
 	}
+
 	return &RollbackTenderDTO{
 		Username:      params.Username,
 		TenderID:      tenderId,
@@ -29,8 +31,9 @@ func ToRollbackTenderDTO(tenderId TenderId, version int32, params RollbackTender
 func (s Server) RollbackTender(w http.ResponseWriter, r *http.Request, tenderId TenderId, version int32, params RollbackTenderParams) {
 	dto, _, err := ToRollbackTenderDTO(tenderId, version, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
 
 		return
@@ -65,7 +68,7 @@ func (s Server) RollbackTender(w http.ResponseWriter, r *http.Request, tenderId 
 	}
 
 	respJSOn := ToTenderJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSOn)
-
 }

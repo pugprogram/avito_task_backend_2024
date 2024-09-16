@@ -21,7 +21,6 @@ type NewBid struct {
 }
 
 func (db Database) EditBid(ctx context.Context, editBid handlers.EditBidDTO) (*handlers.BidOut, error) {
-
 	queryGetLastVersion := `
 		SELECT bid_id, bid_name, bid_description, bid_status, tender_id, tender_version, approved_count, bid_author_type, bid_author_id, bid_version, created_at
 		FROM bid
@@ -31,6 +30,7 @@ func (db Database) EditBid(ctx context.Context, editBid handlers.EditBidDTO) (*h
 	 `
 
 	var bid handlers.BidOut
+
 	var newBid NewBid
 
 	// Выполнение запроса для получения последней версии предложения

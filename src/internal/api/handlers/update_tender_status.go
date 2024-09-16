@@ -17,26 +17,28 @@ func ToUpdateTenderStatusDTO(tenderId TenderId, params UpdateTenderStatusParams)
 		return nil, "tender ID", errors.New("invalid format for tender ID")
 	}
 
-	var flagStatusPublished = params.Status != TenderStatus(TenderStatusPublished)
-	var flagStatusClosed = params.Status != TenderStatus(TenderStatusClosed)
+	flagStatusPublished := params.Status != TenderStatus(TenderStatusPublished)
+	flagStatusClosed := params.Status != TenderStatus(TenderStatusClosed)
 
 	if flagStatusPublished && flagStatusClosed {
 		return nil, "status", errors.New("invalid format for status")
 	}
+
 	return &UpdateTenderStatusDTO{
 		TenderId: tenderId,
 		Status:   string(params.Status),
 		Username: string(params.Username),
 	}, "", nil
-
 }
 
 func (s Server) UpdateTenderStatus(w http.ResponseWriter, r *http.Request, tenderId TenderId, params UpdateTenderStatusParams) {
 	dto, _, err := ToUpdateTenderStatusDTO(tenderId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
@@ -47,6 +49,7 @@ func (s Server) UpdateTenderStatus(w http.ResponseWriter, r *http.Request, tende
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgNotFound.Error(),
 			})
+
 			return
 		}
 
@@ -68,6 +71,7 @@ func (s Server) UpdateTenderStatus(w http.ResponseWriter, r *http.Request, tende
 	}
 
 	respJSON := ToTenderJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

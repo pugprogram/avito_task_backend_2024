@@ -7,8 +7,11 @@ import (
 )
 
 func (db Database) SubmitBidDecision(ctx context.Context, submitBidDecision handlers.SubmitBidDecisionDTO) (*handlers.BidOut, error) {
-	var bidOut handlers.BidOut
-	var bidOutPointer *handlers.BidOut
+	var (
+		bidOut        handlers.BidOut
+		bidOutPointer *handlers.BidOut
+	)
+
 	// Получение текущего статуса и количества одобрений
 	query := `
 		SELECT bid_status, approved_count, tender_id
@@ -18,9 +21,11 @@ func (db Database) SubmitBidDecision(ctx context.Context, submitBidDecision hand
 		LIMIT 1;
 	`
 
-	var bidStatus string
-	var approvedCount int
-	var tenderId string
+	var (
+		bidStatus     string
+		approvedCount int
+		tenderId      string
+	)
 
 	err := db.db.QueryRowContext(ctx, query, submitBidDecision.BidId).Scan(&bidStatus, &approvedCount, &tenderId)
 	if err != nil {

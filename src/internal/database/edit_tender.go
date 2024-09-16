@@ -22,6 +22,7 @@ func (db Database) EditTender(ctx context.Context, editTenderDTO handlers.EditTe
 	 `
 
 	var tender handlers.TenderOUT
+
 	var newTender handlers.TenderOUT
 
 	// Выполнение запроса для получения последней версии тендера
@@ -46,6 +47,7 @@ func (db Database) EditTender(ctx context.Context, editTenderDTO handlers.EditTe
 	if len(editTenderDTO.TenderServiceType) != 0 {
 		tender.ServiceType = editTenderDTO.TenderServiceType
 	}
+
 	if len(editTenderDTO.TenderName) != 0 {
 		tender.Name = editTenderDTO.TenderName
 	}

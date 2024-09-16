@@ -17,6 +17,7 @@ func ToGetTendersDTO(tender GetTendersParams) (*GetTendersDTO, string, error) {
 		var defaultLimit int32 = 5
 		tender.Limit = &defaultLimit
 	}
+
 	if *tender.Limit < 0 && *tender.Limit > 50 {
 		return nil, "limit", errors.New("invalid format for limit")
 	}
@@ -25,6 +26,7 @@ func ToGetTendersDTO(tender GetTendersParams) (*GetTendersDTO, string, error) {
 		var defaultOfsett int32 = 0
 		tender.Offset = &defaultOfsett
 	}
+
 	if *tender.Offset < 0 {
 		return nil, "offset", errors.New("invalid format for offset")
 	}
@@ -41,6 +43,7 @@ func ToGetTendersDTO(tender GetTendersParams) (*GetTendersDTO, string, error) {
 		flagServiceConstruction := serviceType != TenderServiceType(Construction)
 		flagServiceDelivery := serviceType != TenderServiceType(Delivery)
 		flagServiceManufacture := serviceType != TenderServiceType(Manufacture)
+
 		if flagServiceConstruction && flagServiceDelivery && flagServiceManufacture {
 			return nil, "service type", errors.New("invalid format for service type")
 		}
@@ -51,23 +54,26 @@ func ToGetTendersDTO(tender GetTendersParams) (*GetTendersDTO, string, error) {
 		Offset:      (int64(*tender.Offset)),
 		ServiceType: *tender.ServiceType,
 	}, "", nil
-
 }
 
 func (s Server) GetTenders(w http.ResponseWriter, r *http.Request, params GetTendersParams) {
 	dto, _, err := ToGetTendersDTO(params)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 
 	resp, err := s.repo.GetTenders(r.Context(), *dto)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		responseJson := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(responseJson)
+
 		return
 	}
 

@@ -4,12 +4,15 @@ func ToErrorResponseJSON(errorResponse error) ErrorResponse {
 	errorResponseJson := ErrorResponse{
 		Reason: errorResponse.Error(),
 	}
+
 	return errorResponseJson
 }
 
 func ToTendersResponseJSON(tenders []TenderOUT) []Tender {
 	var tendersResponseJSON []Tender
+
 	var tenderResponseJSON Tender
+
 	for _, tender := range tenders {
 		tenderResponseJSON = Tender{
 			CreatedAt:      tender.CreatedAt,
@@ -43,7 +46,9 @@ func ToBidJSON(bid BidOut) Bid {
 
 func ToBidsJSON(bids []BidOut) []Bid {
 	var bidsResponseJSON []Bid
+
 	var bidResponseJSON Bid
+
 	for _, bid := range bids {
 		bidResponseJSON = ToBidJSON(bid)
 		bidsResponseJSON = append(bidsResponseJSON, bidResponseJSON)
@@ -66,8 +71,11 @@ func ToTenderJSON(tender TenderOUT) Tender {
 }
 
 func ToReviewsJSON(bidReviews []BidReviewOut) []BidReview {
-	var bidsResponseJSON []BidReview
-	var bidResponseJSON BidReview
+	var (
+		bidsResponseJSON []BidReview
+		bidResponseJSON  BidReview
+	)
+
 	for _, bid := range bidReviews {
 		bidResponseJSON = BidReview{
 			CreatedAt:   bid.CreatedAt,

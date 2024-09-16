@@ -24,7 +24,6 @@ import (
 //go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -config ../../api/cfg.yaml ../../api/openapi.yaml
 
 func main() {
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
@@ -48,6 +47,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error opening database connection: %v", err)
 	}
+
 	defer func() { _ = db.Close() }()
 
 	database := database.NewDataBase(db)
@@ -64,6 +64,7 @@ func main() {
 	// Start server in a new goroutine
 	go func() {
 		log.Printf("Service started on port %s", config.ServerAddress)
+
 		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Printf("Error while starting server: %v", err)
 		}
@@ -81,5 +82,6 @@ func main() {
 	if err := s.Shutdown(ctx); err != nil {
 		log.Printf("Error during server shutdown: %v", err)
 	}
+
 	log.Println("Server gracefully stopped")
 }

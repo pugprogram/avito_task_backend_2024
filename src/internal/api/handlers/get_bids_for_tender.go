@@ -46,15 +46,16 @@ func ToGetBidsForTenderDTO(tender GetBidsForTenderParams, tenderId TenderId) (*G
 		TenderId: string(tenderId),
 		Username: string(tender.Username),
 	}, "", nil
-
 }
 
 func (s Server) GetBidsForTender(w http.ResponseWriter, r *http.Request, tenderId TenderId, params GetBidsForTenderParams) {
 	dto, _, err := ToGetBidsForTenderDTO(params, tenderId)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
@@ -87,6 +88,7 @@ func (s Server) GetBidsForTender(w http.ResponseWriter, r *http.Request, tenderI
 	}
 
 	respJSON := ToBidsJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

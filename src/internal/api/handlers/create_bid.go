@@ -34,6 +34,7 @@ func ToCreateBidDTO(bid CreateBidJSONBody) (*CreateBidDTO, string, error) {
 
 	flagUserOrganization := bid.AuthorType != BidAuthorType(Organization)
 	flagUser := bid.AuthorType != BidAuthorType(User)
+
 	if flagUserOrganization && flagUser {
 		return nil, "status", errors.New("invalid format for author type")
 	}
@@ -54,6 +55,7 @@ func (s Server) CreateBid(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&tenderReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+
 		respJSON := ToErrorResponseJSON(err)
 		_ = json.NewEncoder(w).Encode(respJSON)
 
@@ -62,9 +64,11 @@ func (s Server) CreateBid(w http.ResponseWriter, r *http.Request) {
 
 	bid, _, err := ToCreateBidDTO(tenderReq)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusBadRequest)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
@@ -72,25 +76,32 @@ func (s Server) CreateBid(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, ErrMsgUserNotExist) {
 			w.WriteHeader(http.StatusUnauthorized)
+
 			respJSON := ToErrorResponseJSON(err)
 			_ = json.NewEncoder(w).Encode(respJSON)
+
 			return
 		}
 
 		if errors.Is(err, ErrMsgNotPermission) {
 			w.WriteHeader(http.StatusForbidden)
+
 			respJSON := ToErrorResponseJSON(err)
 			_ = json.NewEncoder(w).Encode(respJSON)
+
 			return
 		}
 
 		w.WriteHeader(http.StatusNotFound)
+
 		respJSON := ToErrorResponseJSON(err)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
 	respJSON := ToBidJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

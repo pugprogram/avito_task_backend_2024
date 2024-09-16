@@ -49,6 +49,7 @@ func (s Server) GetUserBids(w http.ResponseWriter, r *http.Request, params GetUs
 		_ = json.NewEncoder(w).Encode(&ErrorResponse{
 			Reason: ErrMsgUserNotExist.Error(),
 		})
+
 		return
 	}
 
@@ -63,6 +64,7 @@ func (s Server) GetUserBids(w http.ResponseWriter, r *http.Request, params GetUs
 	}
 
 	respJSON := ToBidsJSON(*resp)
+
 	w.WriteHeader(http.StatusOK)
 	_ = json.NewEncoder(w).Encode(respJSON)
 }

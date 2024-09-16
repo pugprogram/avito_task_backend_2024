@@ -30,9 +30,11 @@ func ToGetTenderStatusDTO(tenderId TenderId, params GetTenderStatusParams) (*Get
 func (s Server) GetTenderStatus(w http.ResponseWriter, r *http.Request, tenderId TenderId, params GetTenderStatusParams) {
 	dto, _, err := ToGetTenderStatusDTO(tenderId, params)
 	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
 		respJSON := ToErrorResponseJSON(err)
+
+		w.WriteHeader(http.StatusUnauthorized)
 		_ = json.NewEncoder(w).Encode(respJSON)
+
 		return
 	}
 
@@ -43,6 +45,7 @@ func (s Server) GetTenderStatus(w http.ResponseWriter, r *http.Request, tenderId
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgUserNotExist.Error(),
 			})
+
 			return
 		}
 
@@ -51,6 +54,7 @@ func (s Server) GetTenderStatus(w http.ResponseWriter, r *http.Request, tenderId
 			_ = json.NewEncoder(w).Encode(&ErrorResponse{
 				Reason: ErrMsgNotPermission.Error(),
 			})
+
 			return
 		}
 
@@ -58,6 +62,7 @@ func (s Server) GetTenderStatus(w http.ResponseWriter, r *http.Request, tenderId
 		_ = json.NewEncoder(w).Encode(&ErrorResponse{
 			Reason: ErrMsgNotFound.Error(),
 		})
+
 		return
 	}
 
@@ -65,5 +70,4 @@ func (s Server) GetTenderStatus(w http.ResponseWriter, r *http.Request, tenderId
 	_ = json.NewEncoder(w).Encode(map[string]TenderStatus{
 		"status": TenderStatus(*tenderStatus),
 	})
-
 }

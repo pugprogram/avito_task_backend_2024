@@ -7,7 +7,6 @@ import (
 )
 
 func (db Database) UpdateTenderStatus(ctx context.Context, in handlers.UpdateTenderStatusDTO) (*handlers.TenderOUT, error) {
-
 	if in.Status == "Rejected" {
 		return nil, handlers.ErrMsgNotPermission
 	}
