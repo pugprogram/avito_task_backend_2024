@@ -43,6 +43,8 @@ cd zadanie-6105
    docker-compose -f docker-compose.yml up --build 
    ```
 
+4. Если сервис не запускается, то, пожалуйста, откатитесь до [версии до добавления линтера](https://github.com/pugprogram/avito_task_backend_2024/commit/461c130c4e2c0a390c047a7aca5563481aba2ab2).
+
 # Детали реализации
 
 ## Структура проекта
