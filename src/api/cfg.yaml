@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=../../configuration-schema.json
+package: handlers
+output: ../../internal/generated/api/handlers/handlers.go
+generate:
+  std-http-server: true
+  models: true
